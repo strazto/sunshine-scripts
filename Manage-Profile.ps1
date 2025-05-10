@@ -15,11 +15,17 @@
 
 #>
 
-#–– Configuration ––
-$ExePath    = "C:\Program Files\DisplayMagician\DisplayMagicianConsole.exe"
+param(
+    [Parameter(ParameterSetName = 'Apply', Position = 0)]
+    [string]$Uuid,
 
-# Save file path lives alongside this script
-$SaveFile   = Join-Path -Path $PSScriptRoot -ChildPath "prev_profile.txt"
+    [Parameter(ParameterSetName = 'Revert')]
+    [switch]$Undo
+)
+
+#–– Configuration ––
+$ExePath  = "C:\Program Files\DisplayMagician\DisplayMagicianConsole.exe"
+$SaveFile = Join-Path -Path $PSScriptRoot -ChildPath "prev_profile.txt"
 
 function Save-AndSetProfile {
     param(
@@ -56,14 +62,6 @@ function Revert-Profile {
 }
 
 #–– Entry point ––
-param(
-    [Parameter(ParameterSetName = 'Apply', Position = 0)]
-    [string]$Uuid,
-
-    [Parameter(ParameterSetName = 'Revert')]
-    [switch]$Undo
-)
-
 switch ($PSCmdlet.ParameterSetName) {
     'Apply'  { Save-AndSetProfile -Uuid $Uuid }
     'Revert' { Revert-Profile }
